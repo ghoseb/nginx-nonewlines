@@ -50,7 +50,7 @@ static ngx_int_t ngx_http_no_newlines_filter_init (ngx_conf_t *cf);
 static void ngx_http_no_newlines_strip_buffer (ngx_buf_t *buffer,
                                                ngx_http_no_newlines_ctx_t *ctx);
 
-static ngx_int_t isspace (u_char c);
+static ngx_int_t ngx_isspace (u_char c);
 
 /* Module directives */
 static ngx_command_t  ngx_http_no_newlines_commands[] = {
@@ -217,7 +217,7 @@ static void ngx_http_no_newlines_strip_buffer (ngx_buf_t *buffer,
         switch(ctx->state) {
         case state_text_compress:
             // eat space
-            while (isspace(*reader)) {
+            while (ngx_isspace(*reader)) {
                 reader++;
                 space_eaten = 1;
             }
@@ -231,7 +231,7 @@ static void ngx_http_no_newlines_strip_buffer (ngx_buf_t *buffer,
             // eat all space after '>'
             if(*reader == '>') {
                 *writer++ = *reader++;
-                while (isspace (*reader)) {
+                while (ngx_isspace (*reader)) {
                     reader++;
                 }
             }
@@ -270,7 +270,7 @@ static void ngx_http_no_newlines_strip_buffer (ngx_buf_t *buffer,
     buffer->last = writer;
 }
 
-static ngx_int_t isspace (u_char c)
+static ngx_int_t ngx_isspace (u_char c)
 {
     if (c == '\n' ||
         c == '\r' ||
